@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  kc_pin_postgres:
+    image: postgres:11
+    container_name: kc_pin_postgres
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_PASSWORD: StrongPassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./kcpinpg:/var/lib/postgresql/data
+
+  kc_pin_keycloak:
+    image: quay.io/keycloak/keycloak:19.0.3
+    container_name: kc_pin_keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: StrongPassword
+      KC_DB_URL: jdbc:postgresql://kc_pin_postgres:5432/keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: adminpassword
+    command:
+      - start-dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kc_pin_postgres
+    volumes:
+      - ./kcpintheme:/opt/keycloak/themes
+      - ./kcpinproviders:/opt/keycloak/providers
