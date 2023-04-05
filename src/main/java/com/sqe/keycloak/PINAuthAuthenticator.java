@@ -1,6 +1,5 @@
 package com.sqe.keycloak;
 
-
 import static org.keycloak.common.util.ServerCookie.SameSiteAttributeValue.NONE;
 
 import java.net.URI;
